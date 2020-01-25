@@ -38,77 +38,53 @@ app.get("/notes", function (req, res) {
 // ===========================================================
 
 app.get("/api/notes", function (req, res) {
-    // const data_base_json = fs.readFile("/db.json")
-    // const data_base_parsed = JSON.parse(data_base);
     fs.readFile(__dirname + `/db/db.json`, function (err, data) {
         if (err) throw err;
         const new_data = JSON.parse(data);
-        // Get title from database
-        // print(new_data[0].title)
-        // Get text from database
-        // print(new_data[0].text)
-
         res.json(new_data);
-
         res.end(new_data);
     })
-
 });
 
 
 
 // Create New Characters - takes in JSON input
 app.post("/api/notes", function (req, res) {
-    // req.body hosts is equal to the JSON post sent from the user
-    // This works because of our body parsing middleware
-    // let i = 1;
     var new_note = req.body;
-    // i++
-    print(new_note)
     fs.readFile(__dirname + '/db/db.json', function (err, data) {
         
-        var json = JSON.parse(data)
+        const json = JSON.parse(data)
         const data_len = json.length + 1
-        // print(data_len)
-        // const last_id = json[data_len]
-        // print(last_id)
-        // print(new_note["id"] = data_len)
         new_note.id = data_len;
 
         print(json)
         json.push(new_note)
-        // print(json)
         fs.writeFile(__dirname + "/db/db.json", JSON.stringify(json), function (err, data) {
             if (err) throw err;
-            // return JSON.stringify(json)
         })
     });
-
-    // // Using a RegEx Pattern to remove spaces from newCharacter
-    // // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
-    // new_note.routeName = new_note.name.replace(/\s+/g, "").toLowerCase();
-
-    // console.log(new_note);
-
-    // db.push(new_note);
-
-    // res.json(new_note);
 });
 
 
 // Displays a single character, or returns false
 app.delete("/api/notes/:id", function (req, res) {
-    var chosen_id = req.params.id;
+    let chosen_id = req.params.id;
 
-    console.log(chosen_id);
-
-    // for (var i = 0; i < chosen_id.length; i++) {
-    //     if (chosen_id === chosen_id[i].routeName) {
-    //         return res.json(chosen_id[i]);
-    //     }
-    // }
-
-    // return res.json(false);
+    print(chosen_id);
+    fs.readFile(__dirname + '/db/db.json', function (err, data) {
+        
+        const json = JSON.parse(data)
+        // const data_len = json.length
+        // print(data_len)
+        // new_note.id = data_len;
+        chosen_id = chosen_id - 1
+        json.splice(chosen_id);
+        print(json)
+        // json.push(new_note)
+        fs.writeFile(__dirname + "/db/db.json", JSON.stringify(json), function (err, data) {
+            if (err) throw err;
+        })
+    });
 });
 
 
