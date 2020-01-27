@@ -73,12 +73,7 @@ app.post("/api/notes", function (req, res) {
     }
     // Add new note to the array in db.json
     db.push(new_note)
-    // Rewrite all note data to json file
-    // fs.writeFileSync(data_path, JSON.stringify(db), function (err, data) {
-    //     if (err) throw err;
-    // })
-    // // Is like send where it automatically sets the content type based on what file it is but adds more json functionality that isn't avaible to res.send()
-    // res.json(new_note);
+    write_to_db_json(res)
 });
 
 // Deletes a specific note based on id
@@ -94,17 +89,11 @@ app.delete("/api/notes/:id", function (req, res) {
         }
            
     } 
-    
-    // // Rewrite all note data to json file
-    // fs.writeFileSync(data_path, JSON.stringify(db), function (err, data) {
-    //     if (err) throw err;
-    // })
-    // // Is like send where it automatically sets the content type based on what file it is but adds more json functionality that isn't avaible to res.send()
-    // res.json(db);
+    write_to_db_json(res)
 });
 
 
-function write_to_db_json() {
+function write_to_db_json(res) {
     // Rewrite all note data to json file
     fs.writeFileSync(data_path, JSON.stringify(db), function (err, data) {
         if (err) throw err;
