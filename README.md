@@ -1,7 +1,7 @@
 # Note-Taker
 
 
-![Sample Note](./public/assets/images/nav.png)
+![Sample Note](./public/assets/Images/nav.png)
 
 
 <!-- <img src="./public/assets/images/nav.png"/> -->
@@ -49,7 +49,7 @@ Giving the user a minimal but effective note taking app to keep track of their t
 * Have fun organizing your life!
 
 ### Home Page
-![home](./public/assets/images/home.png)
+![home](./public/assets/Images/home.png)
 
 <!-- <img src="./public/assets/images/home.png"/> -->
 
@@ -57,5 +57,5 @@ Giving the user a minimal but effective note taking app to keep track of their t
 ![creating note](./public/assets/Images/create.png)
 <!-- <img src="./public/assets/images/create.png"/> -->
 
-![saved notes](./public/assets/images/saved_notes.png)
+![saved notes](./public/assets/Images/saved_notes.png)
 <!-- <img src="./public/assets/images/saved_notes.png"/> -->
