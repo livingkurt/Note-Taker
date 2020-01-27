@@ -1,10 +1,10 @@
 # Note-Taker
 
 
-<!-- ![Sample Note](./public/assets/images/nav.png) -->
+![Sample Note](./public/assets/images/nav.png)
 
 
-<img src="./public/assets/images/nav.png"/>
+<!-- <img src="./public/assets/images/nav.png"/> -->
 
 
  Click [Here](https://note-inscriber-app.herokuapp.com/) to view deployed note taking app
@@ -49,13 +49,13 @@ Giving the user a minimal but effective note taking app to keep track of their t
 * Have fun organizing your life!
 
 ### Home Page
-<!-- ![home](./public/assets/images/home.png) -->
+![home](./public/assets/images/home.png)
 
-<img src="./public/assets/images/home.png"/>
+<!-- <img src="./public/assets/images/home.png"/> -->
 
 ### Notes Page
-<!-- ![creating note](./public/assets/Images/create.png) -->
-<img src="./public/assets/images/create.png"/>
+![creating note](./public/assets/Images/create.png)
+<!-- <img src="./public/assets/images/create.png"/> -->
 
-<!-- ![saved notes](./public/assets/images/saved_notes.png) -->
-<img src="./public/assets/images/saved_notes.png"/>
+![saved notes](./public/assets/images/saved_notes.png)
+<!-- <img src="./public/assets/images/saved_notes.png"/> -->
