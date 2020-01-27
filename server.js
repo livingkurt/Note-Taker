@@ -104,7 +104,7 @@ const fs = require('fs');
 const path = require('path');
 const db = require('./db/db.json');
 
-let databaseFile = path.join(__dirname, '/db/db.json');
+let data_path = path.join(__dirname, '/db/db.json');
 
 
 //adopting express and PORT
@@ -133,35 +133,6 @@ app.get('/api/notes', function (req, res) {
     res.json(db);
 });
 
-// // posting and creating user notes
-// app.post('/api/notes', function(req, res) {
-//     let newNote = req.body;  
-//     //establishing a user ID to make saving and deleting easier  
-//     let id = 99;
-
-//     for (let i = 0; i < db.length; i++) {
-//         let note = db[i];
-
-//         if (note.id > id) {
-//             id = note.id;
-//         }
-//     }
-
-//     //assinging the new note the newest ID
-//     newNote.id = id + 1;
-//     //pushing the new note into the DB. This will automatically show in the browser as well.
-//     db.push(newNote)
-//     //Letting user know in the console that the note saved properply
-//     fs.writeFile(databaseFile, JSON.stringify(db), function(err){
-//         if(err) {
-//             return console.log(err);
-//         }
-//         console.log("Note Saved");
-//     });
-//     res.json(newNote);
-
-// });
-
 let id = 0;
 // Create New Characters - takes in JSON input
 app.post("/api/notes", function (req, res) {
@@ -181,41 +152,30 @@ app.post("/api/notes", function (req, res) {
         id = db.length;
         print(new_note.id = id + 1)
     }
-
-
     db.push(new_note)
     print(db)
 
-
-    fs.writeFile(__dirname + "/db/db.json", JSON.stringify(db), function (err, data) {
+    fs.writeFileSync(data_path, JSON.stringify(db), function (err, data) {
         if (err) throw err;
     })
     res.json(new_note);
 });
-// });
 
-//deleting the chosen note based off ID
-app.delete('/api/notes/:id', function (req, res) {
-    let databaseFile = path.join(__dirname, '/db/db.json')
-    //going through the db(database) to find the correct ID
+// Displays a single character, or returns false
+app.delete("/api/notes/:id", function (req, res) {
+    let chosen_id = req.params.id;
+
     for (let i = 0; i < db.length; i++) {
-
-        if (db[i].id == req.params.id) {
-
-            //cutting out the note using the splice method
+        if (db[i].id == chosen_id){
             db.splice(i, 1);
             break;
         }
-    }
-    //writing int the console for the user to know the note deleted properly
-    fs.writeFileSync(databaseFile, JSON.stringify(db), function (err) {
-
-        if (err) {
-            return console.log(err);
-        } else {
-            console.log("Note deleted");
-        }
-    });
+           
+    } 
+    print(chosen_id);
+    fs.writeFileSync(data_path, JSON.stringify(db), function (err, data) {
+        if (err) throw err;
+    })
     res.json(db);
 });
 
