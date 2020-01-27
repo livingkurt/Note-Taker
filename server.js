@@ -74,11 +74,11 @@ app.post("/api/notes", function (req, res) {
     // Add new note to the array in db.json
     db.push(new_note)
     // Rewrite all note data to json file
-    fs.writeFileSync(data_path, JSON.stringify(db), function (err, data) {
-        if (err) throw err;
-    })
-    // Is like send where it automatically sets the content type based on what file it is but adds more json functionality that isn't avaible to res.send()
-    res.json(new_note);
+    // fs.writeFileSync(data_path, JSON.stringify(db), function (err, data) {
+    //     if (err) throw err;
+    // })
+    // // Is like send where it automatically sets the content type based on what file it is but adds more json functionality that isn't avaible to res.send()
+    // res.json(new_note);
 });
 
 // Deletes a specific note based on id
@@ -94,15 +94,24 @@ app.delete("/api/notes/:id", function (req, res) {
         }
            
     } 
+    
+    // // Rewrite all note data to json file
+    // fs.writeFileSync(data_path, JSON.stringify(db), function (err, data) {
+    //     if (err) throw err;
+    // })
+    // // Is like send where it automatically sets the content type based on what file it is but adds more json functionality that isn't avaible to res.send()
+    // res.json(db);
+});
+
+
+function write_to_db_json() {
     // Rewrite all note data to json file
     fs.writeFileSync(data_path, JSON.stringify(db), function (err, data) {
         if (err) throw err;
     })
     // Is like send where it automatically sets the content type based on what file it is but adds more json functionality that isn't avaible to res.send()
     res.json(db);
-});
-
-
+}
 
 //listening to the Port so it will function like a live site
 app.listen(PORT, function () {
