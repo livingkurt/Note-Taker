@@ -1,181 +1,104 @@
-// // =============================================================
-// // Dependencies
-// // =============================================================
-// var express = require("express");
-// var path = require("path");
-// var fs = require("fs");
-// // var db = require("db/db.json");
+// Calling Dependencies
 
-// // =============================================================
-// // Sets up the Express App
-// // =============================================================
-// var app = express();
-// var PORT = process.env.PORT || 3000;
-
-// // Sets up the Express app to handle data parsing
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
-// app.use(express.static('public'))
-
-// // Routes
-// // =============================================================
-
-// // ===========================================================
-// // HTML Routes
-// // ===========================================================
-
-// // Basic route that sends the user first to the AJAX Page
-// app.get("/", function (req, res) {
-//     res.sendFile(path.join(__dirname, "public/html/index.html"));
-// });
-
-// app.get("/notes", function (req, res) {
-//     res.sendFile(path.join(__dirname, "public/html/notes.html"));
-// });
-
-// // ===========================================================
-// // API Routes
-// // ===========================================================
-
-// app.get("/api/notes", function (req, res) {
-//     fs.readFile(__dirname + `/db/db.json`, function (err, data) {
-//         if (err) throw err;
-//         const new_data = JSON.parse(data);
-//         res.json(new_data);
-//         res.end(new_data);
-//     })
-// });
-
-
-
-// // Create New Characters - takes in JSON input
-// app.post("/api/notes", function (req, res) {
-//     var new_note = req.body;
-//     fs.readFile(__dirname + '/db/db.json', function (err, data) {
-
-//         const json = JSON.parse(data)
-//         const data_len = json.length + 1
-//         new_note.id = data_len;
-
-//         print(json)
-//         json.push(new_note)
-//         fs.writeFile(__dirname + "/db/db.json", JSON.stringify(json), function (err, data) {
-//             if (err) throw err;
-//         })
-//     });
-// });
-
-
-// // Displays a single character, or returns false
-// app.delete("/api/notes/:id", function (req, res) {
-//     let chosen_id = req.params.id;
-
-//     print(chosen_id);
-//     fs.readFile(__dirname + '/db/db.json', function (err, data) {
-
-//         const json = JSON.parse(data)
-//         // const data_len = json.length
-//         // print(data_len)
-//         // new_note.id = data_len;
-//         chosen_id = chosen_id - 1
-//         json.splice(chosen_id);
-//         print(json)
-//         // json.push(new_note)
-//         fs.writeFile(__dirname + "/db/db.json", JSON.stringify(json), function (err, data) {
-//             if (err) throw err;
-//         })
-//     });
-// });
-
-
-// // Starts the server to begin listening
-// // =============================================================
-// app.listen(PORT, function () {
-//     console.log("App listening on PORT " + PORT);
-// });
-
-
-// const print = x => console.log(x);
-
-
-//requiring npms and other files needed for this application
+// Calling Express to create server
 const express = require('express');
+// Calling fs to manipulate the file system
 const fs = require('fs');
+// Calling path to manipulate file paths
 const path = require('path');
+// Calling the db.json file to save and delete notes from
 const db = require('./db/db.json');
 
+
+// Assign db.json file path to a variable
 let data_path = path.join(__dirname, '/db/db.json');
+// Initializing id for new notes being created
+let id = 0;
 
 
-//adopting express and PORT
+// Sets up the Express App
 var app = express();
+// Assign Server a port of 3000 unless given a port from the deployer
 var PORT = process.env.PORT || 3000;
 
-//linking public folder to attain data inside for this application
+// Allows the server to look into the public folder without needing to provide the full relative path 
 app.use(express.static('public'));
 
-//setting up application parsing for my JSON files
+// Middleware is called between processing the request and sending the Response in your server
+
+// Allows the establishing of post requests to json files
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-//Getting local host to load my index.html first
+// Get request to host the index.html
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, '/public//html/index.html'));
 });
 
-//Getting local host to send my notes.html file when called
+// Get request to host the notes.html
 app.get('/notes', function (req, res) {
     res.sendFile(path.join(__dirname, '/public/html/notes.html'));
 });
 
-//Getting my API/Notes
+// Get request for date from db.json
 app.get('/api/notes', function (req, res) {
     res.json(db);
 });
 
-let id = 0;
-// Create New Characters - takes in JSON input
+
+// Creates new note, adds an id, and rewrites the db.json file
 app.post("/api/notes", function (req, res) {
     // Assign the new note data to a variable
     const new_note = req.body;
-    print(new_note)
+    // Loop through your array of notes in your db.json
     for (let i = 0; i < db.length; i++) {
+        // Assign each note to a variable
         let note = db[i];
-        print(note)
-        print(note.id = i + 1)
+        // Assign all of the notes a incrimented id starting at 1
+        note.id = i + 1
     }
+    // If there is no notes saved
     if (db.length === 0) {
+        // Assign 1 to id variable
         id = 1;
-        print(new_note.id = id)
+        // Assign that id to the first note
+        new_note.id = id
     }
+    // If there is notes saved
     else if (db.length > 0) {
+        // Assign the length of the array to the id variable
         id = db.length;
-        print(new_note.id = id + 1)
+        // Assign that id to the newest note created
+        new_note.id = id + 1
     }
+    // Add new note to the array in db.json
     db.push(new_note)
-    print(db)
-
+    // Rewrite all note data to json file
     fs.writeFileSync(data_path, JSON.stringify(db), function (err, data) {
         if (err) throw err;
     })
+    // Is like send where it automatically sets the content type based on what file it is but adds more json functionality that isn't avaible to res.send()
     res.json(new_note);
 });
 
-// Displays a single character, or returns false
+// Deletes a specific note based on id
 app.delete("/api/notes/:id", function (req, res) {
+    // Assigns id that was chosen by user to variable
     let chosen_id = req.params.id;
-
+    // Loop through your array of notes in your db.json
     for (let i = 0; i < db.length; i++) {
+        // If the that is calling to be deleted matches an id that is inside of the db.json
         if (db[i].id == chosen_id){
+            // Remove that object from the array
             db.splice(i, 1);
-            break;
         }
            
     } 
-    print(chosen_id);
+    // Rewrite all note data to json file
     fs.writeFileSync(data_path, JSON.stringify(db), function (err, data) {
         if (err) throw err;
     })
+    // Is like send where it automatically sets the content type based on what file it is but adds more json functionality that isn't avaible to res.send()
     res.json(db);
 });
 
@@ -186,4 +109,4 @@ app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
 });
 
-const print = x => console.log(x);
+// const print = x => console.log(x);
