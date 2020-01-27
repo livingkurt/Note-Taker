@@ -32,16 +32,23 @@ app.use(express.json());
 
 // Get request to host the index.html
 app.get('/', function (req, res) {
+    // Specifiy which html file you want to host on your server when there is just a / in the url
     res.sendFile(path.join(__dirname, '/public//html/index.html'));
+    // Print Status of app
+    print("\n<<<Opening index.html>>>")
 });
 
 // Get request to host the notes.html
 app.get('/notes', function (req, res) {
+    // Specifiy which html file you want to host on your server when there is /notes in the url
     res.sendFile(path.join(__dirname, '/public/html/notes.html'));
+    // Print Status of app
+    print("\n<<<Opening notes.html>>>")
 });
 
 // Get request for date from db.json
 app.get('/api/notes', function (req, res) {
+    // Is like send where it automatically sets the content type based on what file it is but adds more json functionality that isn't avaible to res.send()
     res.json(db);
 });
 
@@ -68,11 +75,16 @@ app.post("/api/notes", function (req, res) {
     else if (db.length > 0) {
         // Assign the length of the array to the id variable
         id = db.length;
+        // Add 1 to id
+        id++
         // Assign that id to the newest note created
-        new_note.id = id + 1
+        new_note.id = id
     }
+    // Print Status of app
+    print(`\n<<<Saving Note id ${id} to Server>>>`)
     // Add new note to the array in db.json
     db.push(new_note)
+    // After Changes have been made, rewrite the db.json file with new changes
     write_to_db_json(res)
 });
 
@@ -82,17 +94,22 @@ app.delete("/api/notes/:id", function (req, res) {
     let chosen_id = req.params.id;
     // Loop through your array of notes in your db.json
     for (let i = 0; i < db.length; i++) {
+        // Assign each note to a variable
+        let note = db[i]
         // If the that is calling to be deleted matches an id that is inside of the db.json
-        if (db[i].id == chosen_id){
+        if (note.id == chosen_id){
             // Remove that object from the array
             db.splice(i, 1);
+            // Print Status of app
+            print(`\n<<<Deleting Note id ${chosen_id} from Server>>>`)
         }
-           
     } 
+    
+    // After Changes have been made, rewrite the db.json file with new changes
     write_to_db_json(res)
 });
 
-
+// After Changes have been made, rewrite the db.json file with new changes
 function write_to_db_json(res) {
     // Rewrite all note data to json file
     fs.writeFileSync(data_path, JSON.stringify(db), function (err, data) {
@@ -100,6 +117,9 @@ function write_to_db_json(res) {
     })
     // Is like send where it automatically sets the content type based on what file it is but adds more json functionality that isn't avaible to res.send()
     res.json(db);
+    // Print Status of app
+    print("\n<<<Updating db.json>>>\n")
+
 }
 
 //listening to the Port so it will function like a live site
@@ -107,4 +127,4 @@ app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
 });
 
-// const print = x => console.log(x);
+const print = x => console.log(x);
